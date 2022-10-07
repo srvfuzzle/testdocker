@@ -5,7 +5,7 @@ EXPOSE 8555 8444
 
 ENV CHIA_ROOT=/root/.chia/mainnet
 ENV keys="generate"
-ENV service="harvester"
+ENV service="farmer"
 ENV plots_dir="/plots"
 ENV farmer_address=
 ENV farmer_port=
@@ -16,7 +16,7 @@ ENV log_to_file="true"
 ENV healthcheck="false"
 
 # Deprecated legacy options
-ENV harvester="true"
+ENV harvester="false"
 ENV farmer="false"
 
 # Minimal list of software dependencies
