@@ -1,22 +1,3 @@
-# CHIA BUILD STEP
-FROM python:3.9 AS chia_build
-
-ARG BRANCH=latest
-ARG COMMIT=""
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-        lsb-release sudo
-
-WORKDIR /chia-blockchain
-
-RUN echo "cloning ${BRANCH}" && \
-    git clone --branch ${BRANCH} --recurse-submodules=mozilla-ca https://github.com/Chia-Network/chia-blockchain.git . && \
-    # If COMMIT is set, check out that commit, otherwise just continue
-    ( [ ! -z "$COMMIT" ] && git checkout $COMMIT ) || true && \
-    echo "running build-script" && \
-    /bin/sh ./install.sh
-
 # IMAGE BUILD
 FROM ilyasbit/debianbase:latest
 
@@ -32,10 +13,10 @@ ENV testnet="false"
 ENV TZ="UTC"
 ENV upnp="true"
 ENV log_to_file="true"
-ENV healthcheck="true"
+ENV healthcheck="false"
 
 # Deprecated legacy options
-ENV harvester="false"
+ENV harvester="true"
 ENV farmer="false"
 
 # Minimal list of software dependencies
@@ -48,10 +29,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
-COPY --from=chia_build /chia-blockchain /chia-blockchain
-
-ENV PATH=/chia-blockchain/venv/bin:$PATH
-WORKDIR /chia-blockchain
+RUN wget https://download.chia.net/latest/x86_64-Ubuntu-cli -O /chia_installer  && \
+    dpkg -i /chia_installer
 
 COPY docker-start.sh /usr/local/bin/
 COPY docker-entrypoint.sh /usr/local/bin/
