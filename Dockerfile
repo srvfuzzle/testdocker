@@ -5,10 +5,10 @@ EXPOSE 8555 8444
 
 ENV CHIA_ROOT=/root/.chia/mainnet
 ENV keys="generate"
-ENV service="farmer"
+ENV service="harvester"
 ENV plots_dir="/plots"
-ENV farmer_address=
-ENV farmer_port=
+ENV farmer_address=127.0.0.1
+ENV farmer_port=8444
 ENV testnet="false"
 ENV TZ="UTC"
 ENV upnp="true"
@@ -16,8 +16,8 @@ ENV log_to_file="true"
 ENV healthcheck="false"
 
 # Deprecated legacy options
-ENV harvester="false"
-ENV farmer="false"
+#ENV harvester="false"
+#ENV farmer="false"
 
 # Minimal list of software dependencies
 #   sudo: Needed for alternative plotter install

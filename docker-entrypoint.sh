@@ -86,7 +86,7 @@ fi
 if [[ ${service} == "harvester" ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} || -z ${ca} ]]; then
     echo "A farmer peer address, port, and ca path are required."
-    exit
+    #exit
   fi
 fi
 
